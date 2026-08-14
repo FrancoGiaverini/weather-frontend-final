@@ -1,0 +1,16 @@
+@use "../base/variables" as v;
+
+body {
+  min-height: 100vh;
+  font-family: v.$font-family;
+  background-color: v.$background-color;
+  color: v.$text-color;
+}
+
+.weather-app__content {
+  min-height: calc(100vh - 180px);
+}
+
+.weather-app__search {
+  max-width: 100%;
+}

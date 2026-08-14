@@ -1,0 +1,30 @@
+@use "../base/variables" as v;
+
+@mixin card-shadow {
+  border-radius: v.$border-radius;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.place-card {
+  @include card-shadow;
+
+  transition: 0.3s;
+
+  &:hover {
+    transform: translateY(-5px);
+  }
+
+  &__icon {
+    font-size: 3rem;
+  }
+
+  &__name {
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+
+  &__temp {
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+}

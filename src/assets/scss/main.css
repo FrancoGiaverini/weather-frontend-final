@@ -1,0 +1,42 @@
+body {
+  min-height: 100vh;
+  font-family: "Segoe UI", sans-serif;
+  background-color: #f8fafc;
+  color: #212529;
+}
+
+.weather-app__content {
+  min-height: calc(100vh - 180px);
+}
+
+.weather-app__search {
+  max-width: 100%;
+}
+
+.weather-app__header {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+}
+
+.place-card {
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: 0.3s;
+}
+.place-card:hover {
+  transform: translateY(-5px);
+}
+.place-card__icon {
+  font-size: 3rem;
+}
+.place-card__name {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+.place-card__temp {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.weather-app__footer {
+  margin-top: 3rem;
+}/*# sourceMappingURL=main.css.map */
