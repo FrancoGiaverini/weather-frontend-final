@@ -120,3 +120,6 @@ npm install
 Ejecutar el proyecto:
 npm run dev
 
+Ruta al repositorio GIT
+
+https://github.com/FrancoGiaverini/weather-frontend-m6.git
