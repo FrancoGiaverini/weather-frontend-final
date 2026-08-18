@@ -69,49 +69,29 @@
 </template>
 
 <script>
-import cities from "../data/cities";
-import ApiClient from "../services/apiClient";
+import { mapState } from "vuex";
 import LugarCard from "../components/LugarCard.vue";  
 
 export default {
-  data() {
-    return {
-      cities,
-      climas: {},
-      busqueda: "",
-      cargando: true,
-      error: null,
-    };
-  },
+ data() {
+  return {
+    busqueda: "",
+  };
+},
   components: {
   LugarCard,
 },
-  computed: {
-    ciudadesFiltradas() {
-      return this.cities.filter((city) =>
-        city.name.toLowerCase().includes(this.busqueda.toLowerCase()),
-      );
-    },
+computed: {
+  ...mapState(["cities", "climas", "cargando", "error"]),
+
+  ciudadesFiltradas() {
+    return this.cities.filter((city) =>
+      city.name.toLowerCase().includes(this.busqueda.toLowerCase()),
+    );
   },
-
-  async mounted() {
-    const apiClient = new ApiClient();
-
-    try {
-      for (const city of this.cities) {
-        const clima = await apiClient.obtenerClima(
-          city.latitude,
-          city.longitude,
-        );
-
-        this.climas[city.id] = clima;
-      }
-    } catch (error) {
-      this.error = "No fue posible cargar los datos del clima.";
-      console.error(error);
-    } finally {
-      this.cargando = false;
-    }
-  },
+},
+mounted() {
+  this.$store.dispatch("cargarClimas");
+},
 };
 </script>

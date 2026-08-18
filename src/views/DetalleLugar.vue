@@ -108,48 +108,36 @@
 </template>
 
 <script>
-import cities from "../data/cities";
-import ApiClient from "../services/apiClient";
+import { mapState } from "vuex";
 import PronosticoCard from "../components/PronosticoCard.vue";
 
 export default {
   data() {
-    return {
-      city: null,
-      clima: null,
-      estadisticas: null,
-      alerta: null,
-      cargando: true,
-      error: null,
-    };
+    return {};
   },
   components: {
     PronosticoCard,
   },
 
-  async mounted() {
-    const id = Number(this.$route.params.id);
+  computed: {
+    ...mapState({
+      city: "selectedCity",
+      clima: "selectedWeather",
+      cargando: "cargando",
+      error: "error",
+    }),
 
-    this.city = cities.find((city) => city.id === id);
-
-    if (!this.city) {
-      this.error = "No se encontró el lugar.";
-      this.cargando = false;
-      return;
-    }
-
-    const apiClient = new ApiClient();
-
-    try {
-      this.clima = await apiClient.obtenerClima(
-        this.city.latitude,
-        this.city.longitude,
-      );
+    estadisticas() {
+      if (!this.clima) {
+        return null;
+      }
 
       const temperaturasMinimas = this.clima.daily.temperature_2m_min;
+
       const temperaturasMaximas = this.clima.daily.temperature_2m_max;
 
       const temperaturaMinima = Math.min(...temperaturasMinimas);
+
       const temperaturaMaxima = Math.max(...temperaturasMaximas);
 
       const suma = temperaturasMaximas.reduce(
@@ -172,27 +160,35 @@ export default {
         }
       });
 
-      this.estadisticas = {
+      return {
         temperaturaMinima,
         temperaturaMaxima,
         promedio,
         diasSoleados,
         diasLluvia,
       };
-
-      if (promedio > 30) {
-        this.alerta = "🔥 Alerta de calor";
-      } else if (diasLluvia >= 3) {
-        this.alerta = "🌧 Semana lluviosa";
-      } else {
-        this.alerta = "✅ Sin alertas climáticas";
+    },
+    alerta() {
+      if (!this.estadisticas) {
+        return null;
       }
-    } catch (error) {
-      this.error = "No fue posible cargar los datos del clima.";
-      console.error(error);
-    } finally {
-      this.cargando = false;
-    }
+
+      if (this.estadisticas.promedio > 30) {
+        return "🔥 Alerta de calor";
+      }
+
+      if (this.estadisticas.diasLluvia >= 3) {
+        return "🌧 Semana lluviosa";
+      }
+
+      return "✅ Sin alertas climáticas";
+    },
+  },
+
+  async mounted() {
+    const id = Number(this.$route.params.id);
+
+    await this.$store.dispatch("cargarDetalle", id);
   },
 };
 </script>
